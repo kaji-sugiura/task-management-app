@@ -2,23 +2,21 @@ package com.example.demo.domain.service.impl;
 
 import com.example.demo.domain.dto.UserRegistrationDTO;
 import com.example.demo.domain.service.UserService;
-import com.example.demo.infrastructure.api.CognitoService;
+import com.example.demo.exception.UserAlreadyExistsException;
 import com.example.demo.infrastructure.entity.User;
 import com.example.demo.infrastructure.repository.UserRepository;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class UserServiceImpl implements UserService {
 
-  private final CognitoService cognitoService;
-
   private final UserRepository userRepository;
 
   @Autowired
-  public UserServiceImpl(CognitoService cognitoService, UserRepository userRepository) {
-    this.cognitoService = cognitoService;
+  public UserServiceImpl(UserRepository userRepository) {
     this.userRepository = userRepository;
   }
 
@@ -39,15 +37,14 @@ public class UserServiceImpl implements UserService {
    * ユーザ登録
    *
    * @param request 登録情報
-   * @throws Exception 例外(DB接続)
+   * @throws UserAlreadyExistsException 例外(DB接続)
    */
   @Override
+  @Transactional
   public void register(UserRegistrationDTO request) throws Exception {
     if (isEmailAlreadyRegistered(request.getEmail())) {
-      // TODO: 該当のメールアドレスが既に存在する場合の例外を投げる
-      throw new Exception();
+      throw new UserAlreadyExistsException("メールアドレス = " + request.getEmail() + " のユーザは既に存在しています。");
     }
     userRepository.save(User.from(request));
-    cognitoService.userRegister(request.getEmail(), request.getPassword());
   }
 }
