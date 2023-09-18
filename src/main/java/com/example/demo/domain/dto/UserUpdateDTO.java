@@ -1,5 +1,6 @@
 package com.example.demo.domain.dto;
 
+import com.example.demo.presentation.request.UserUpdateRequest;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -17,9 +18,8 @@ public class UserUpdateDTO {
 
   private String email;
 
-  private String password;
-
-  public static UserUpdateDTO from() {
-    return null;
+  public static UserUpdateDTO from(UserUpdateRequest request, Long id) {
+    return UserUpdateDTO.builder().id(id).nickName(request.getNickName()).email(request.getEmail())
+        .build();
   }
 }

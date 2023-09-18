@@ -57,6 +57,7 @@ public class UserServiceImpl implements UserService {
    * @throws Exception DB接続などの例外
    */
   @Override
+  @Transactional
   public void update(UserUpdateDTO request) throws Exception {
     if (isEmailAlreadyRegistered(request.getEmail())) {
       throw new UserAlreadyExistsException("メールアドレス = " + request.getEmail() + " のユーザは既に存在しています。");
