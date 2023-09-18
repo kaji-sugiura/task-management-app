@@ -35,7 +35,7 @@ public class UserController {
    */
   @PostMapping
   @ResponseStatus(HttpStatus.CREATED)
-  public void register(@PathVariable Long id, @Valid @RequestBody UserRegisterRequest request)
+  public void register(@Valid @RequestBody UserRegisterRequest request)
       throws Exception {
     UserRegistrationDTO dto = UserRegistrationDTO.from(request);
     userService.register(dto);
@@ -50,7 +50,7 @@ public class UserController {
    */
   @PutMapping("/{id}")
   @ResponseStatus(HttpStatus.OK)
-  public void update(@PathVariable Long id, @Valid @RequestBody UserUpdateRequest request)
+  public void update(@PathVariable long id, @Valid @RequestBody UserUpdateRequest request)
       throws Exception {
     UserUpdateDTO dto = UserUpdateDTO.from(request, id);
     userService.update(dto);
