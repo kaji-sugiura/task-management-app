@@ -22,9 +22,11 @@ public class UserRegisterRequest {
   private String email;
 
   @NotBlank(message = "password must not be blank or null")
+  @Size(min = 8, message = "password must be greater than 8 characters")
   private String password;
 
   @NotBlank(message = "password must not be blank or null")
+  @Size(min = 8, message = "confirmPassword must be greater than 8 characters")
   private String confirmPassword;
 
 }

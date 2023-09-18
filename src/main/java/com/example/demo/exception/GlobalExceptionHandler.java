@@ -19,8 +19,13 @@ public class GlobalExceptionHandler {
       MethodArgumentNotValidException ex) {
     Map<String, String> errors = new HashMap<>();
     ex.getBindingResult().getAllErrors().forEach((error) -> {
-      String fieldName = ((FieldError) error).getField();
+      String fieldName = "";
       String errorMessage = error.getDefaultMessage();
+      if (error instanceof FieldError) {
+        fieldName = ((FieldError) error).getField();
+      } else {
+        fieldName = error.getObjectName();
+      }
       errors.put(fieldName, errorMessage);
     });
     return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
