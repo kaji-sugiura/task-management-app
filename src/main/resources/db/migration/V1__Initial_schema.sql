@@ -1,6 +1,6 @@
 CREATE TABLE IF NOT EXISTS users (
     user_id INT AUTO_INCREMENT PRIMARY KEY,
-    nickname VARCHAR(50) NOT NULL COMMENT 'ニックネーム',
+    nick_name VARCHAR(50) NOT NULL COMMENT 'ニックネーム',
     email VARCHAR(50) NOT NULL UNIQUE COMMENT 'メールアドレス',
     created_at DATETIME NOT NULL COMMENT '登録日',
     updated_at DATETIME NOT NULL COMMENT '更新日'
