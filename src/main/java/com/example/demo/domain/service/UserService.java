@@ -1,6 +1,7 @@
 package com.example.demo.domain.service;
 
 import com.example.demo.domain.dto.UserRegistrationDTO;
+import com.example.demo.domain.dto.UserUpdateDTO;
 
 /**
  * user service
@@ -19,7 +20,15 @@ public interface UserService {
    * ユーザ登録
    *
    * @param request 登録情報
-   * @throws Exception 例外(DB接続)
+   * @throws Exception DB接続などの例外
    */
   void register(UserRegistrationDTO request) throws Exception;
+
+  /**
+   * ユーザ情報更新
+   *
+   * @param request 更新情報
+   * @throws Exception DB接続などの例外
+   */
+  void update(UserUpdateDTO request) throws Exception;
 }
