@@ -39,7 +39,7 @@ public class GlobalExceptionHandler {
   }
 
   @ExceptionHandler(UserNotExistsException.class)
-  public ResponseEntity<Object> handleUserAlreadyExistsException(UserNotExistsException ex) {
+  public ResponseEntity<Object> handleUserNotExistsException(UserNotExistsException ex) {
     return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
         ex.getMessage()
     );
