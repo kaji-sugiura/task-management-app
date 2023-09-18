@@ -1,8 +1,10 @@
 package com.example.demo.domain.service.impl;
 
 import com.example.demo.domain.dto.UserRegistrationDTO;
+import com.example.demo.domain.dto.UserUpdateDTO;
 import com.example.demo.domain.service.UserService;
 import com.example.demo.exception.UserAlreadyExistsException;
+import com.example.demo.exception.UserNotExistsException;
 import com.example.demo.infrastructure.entity.User;
 import com.example.demo.infrastructure.repository.UserRepository;
 import java.util.Optional;
@@ -46,5 +48,25 @@ public class UserServiceImpl implements UserService {
       throw new UserAlreadyExistsException("メールアドレス = " + request.getEmail() + " のユーザは既に存在しています。");
     }
     userRepository.save(User.from(request));
+  }
+
+  /**
+   * ユーザ情報更新
+   *
+   * @param request 更新情報
+   * @throws Exception DB接続などの例外
+   */
+  @Override
+  @Transactional
+  public void update(UserUpdateDTO request) throws Exception {
+    if (isEmailAlreadyRegistered(request.getEmail())) {
+      throw new UserAlreadyExistsException("メールアドレス = " + request.getEmail() + " のユーザは既に存在しています。");
+    }
+    Optional<User> user = userRepository.findById(request.getId());
+    if (user.isEmpty()) {
+      throw new UserNotExistsException("userId = " + request.getId() + " のユーザは存在しません。");
+    }
+    User updatedUser = User.from(request, user.get().getCreatedAt());
+    userRepository.save(updatedUser);
   }
 }

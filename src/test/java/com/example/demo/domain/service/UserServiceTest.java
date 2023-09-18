@@ -7,7 +7,9 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.when;
 
 import com.example.demo.domain.dto.UserRegistrationDTO;
+import com.example.demo.domain.dto.UserUpdateDTO;
 import com.example.demo.exception.UserAlreadyExistsException;
+import com.example.demo.exception.UserNotExistsException;
 import com.example.demo.infrastructure.entity.User;
 import com.example.demo.infrastructure.repository.UserRepository;
 import java.util.Optional;
@@ -51,7 +53,7 @@ public class UserServiceTest {
     assertFalse(userService.isEmailAlreadyRegistered(email));
   }
 
-  @DisplayName("should_throw_UserAlreadyExistsException when email already exits")
+  @DisplayName("should throw UserAlreadyExistsException when email already exits")
   @Test
   public void test_register_should_throw_UserAlreadyExistsException() {
     String email = "test@mail.com";
@@ -61,5 +63,18 @@ public class UserServiceTest {
       userService.register(UserRegistrationDTO.builder().email(email).build());
     });
     assertEquals("メールアドレス = " + email + " のユーザは既に存在しています。", ex.getMessage());
+  }
+
+  @DisplayName("should throw User Not Exists Exception when user doesn't exists")
+  @Test
+  public void test_update_should_throw_UserNotExistsException() {
+    UserUpdateDTO dto = UserUpdateDTO.builder().id(1L).email("test@test.com").build();
+    when(userRepository.findByEmail(dto.getEmail())).thenReturn(
+        Optional.empty());
+    when(userRepository.findById(dto.getId())).thenReturn(Optional.empty());
+    UserNotExistsException ex = assertThrows(UserNotExistsException.class, () -> {
+      userService.update(dto);
+    });
+    assertEquals("userId = " + dto.getId() + " のユーザは存在しません。", ex.getMessage());
   }
 }

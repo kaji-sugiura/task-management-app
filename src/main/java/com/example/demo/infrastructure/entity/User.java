@@ -1,6 +1,7 @@
 package com.example.demo.infrastructure.entity;
 
 import com.example.demo.domain.dto.UserRegistrationDTO;
+import com.example.demo.domain.dto.UserUpdateDTO;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -46,6 +47,12 @@ public class User {
   public static User from(UserRegistrationDTO userRegistrationDTO) {
     return User.builder().nickName(userRegistrationDTO.getNickName())
         .email(userRegistrationDTO.getEmail()).createdAt(LocalDateTime.now())
+        .updatedAt(LocalDateTime.now()).build();
+  }
+
+  public static User from(UserUpdateDTO dto, LocalDateTime createdAt) {
+    return User.builder().userId(dto.getId()).nickName(dto.getNickName())
+        .email(dto.getEmail()).createdAt(createdAt)
         .updatedAt(LocalDateTime.now()).build();
   }
 }
